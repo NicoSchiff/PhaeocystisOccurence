@@ -168,7 +168,9 @@ dataBaseline_Arctic <- read.csv(file_path, dec = ",", sep = ";")
 
 Phaeocystis_Arctic <-
   dataBaseline_Arctic %>%
-  filter(scientificName %in% taxon_name)
+  filter(scientificName %in% taxon_name) %>% 
+  mutate(eventDate = as.Date(eventDate)) %>% 
+  select(contains(col), acceptedNameUsage, acceptedNameUsageID)  
 
 # Taxonomy verification with worms  ---------------------------------------
 
@@ -196,7 +198,8 @@ data <-
   bind_rows(
     obis_occ,
     gbif_occ,
-    Righetti2020
+    Righetti2020,
+    Phaeocystis_Arctic
   ) %>%
   left_join(., verif_sp, by = c("scientificName" = "scientificname")) %>%
   mutate(
